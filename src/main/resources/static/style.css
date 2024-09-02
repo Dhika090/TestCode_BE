@@ -43,12 +43,14 @@ button {
     border: none;
     cursor: pointer;
     border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #218838;
 }
-/* Gaya untuk overlay yang menutupi seluruh layar */
+
+/* Overlay covering the entire screen */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -65,7 +67,7 @@ button:hover {
     display: flex;
 }
 
-/* Gaya untuk pop-up form */
+/* Pop-up form styling */
 .modal-content {
     background-color: white;
     padding: 20px;
@@ -74,6 +76,7 @@ button:hover {
     width: 300px;
     max-width: 100%;
     z-index: 1001;
+    animation: slide-in 0.3s ease-out;
 }
 
 .modal-content h2 {
@@ -104,13 +107,14 @@ button:hover {
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
 .modal-content button:hover {
     background-color: #218838;
 }
 
-/* Tombol untuk membuka form */
+/* Button to open the modal */
 .open-modal-button {
     padding: 10px 20px;
     background-color: #007bff;
@@ -119,13 +123,14 @@ button:hover {
     border-radius: 4px;
     cursor: pointer;
     margin-bottom: 20px;
+    transition: background-color 0.3s ease;
 }
 
 .open-modal-button:hover {
     background-color: #0056b3;
 }
 
-/* Gaya untuk tombol close */
+/* Close button for the modal */
 .close-modal-button {
     background-color: #dc3545;
     color: white;
@@ -134,8 +139,21 @@ button:hover {
     padding: 8px;
     cursor: pointer;
     float: right;
+    transition: background-color 0.3s ease;
 }
 
 .close-modal-button:hover {
     background-color: #c82333;
+}
+
+/* Add smooth slide-in animation for the modal */
+@keyframes slide-in {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }

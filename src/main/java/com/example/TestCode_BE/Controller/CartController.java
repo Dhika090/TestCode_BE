@@ -8,15 +8,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
 
     @Autowired
     private CartService cartService;
-
     @PostMapping("/add")
     public ResponseEntity<Cart> addProductToChar(@RequestParam Long productId, @RequestParam int quantity){
+        System.out.println("Received productId: " + productId + ", quantity: " + quantity);
         Cart cart = cartService.addProductToChart(productId,quantity);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }

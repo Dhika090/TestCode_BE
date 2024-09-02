@@ -35,7 +35,7 @@ class ProductControllerTest {
     @BeforeEach
     void Setup(){
         MockitoAnnotations.openMocks(this);
-        product = new Product("Test Product","Test Description", 100.0);
+        product = new Product("Test Product","Test type", 100.0);
         product.setId(1L);
     }
 

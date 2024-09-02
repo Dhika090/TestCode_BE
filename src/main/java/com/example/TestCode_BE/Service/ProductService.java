@@ -32,7 +32,7 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         product.setName(productDetails.getName());
-        product.setDescription(productDetails.getDescription());
+        product.setType(productDetails.getType());
         product.setPrice(productDetails.getPrice());
 
         return productRepository.save(product);
@@ -43,4 +43,5 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         productRepository.delete(product);
     }
+
 }

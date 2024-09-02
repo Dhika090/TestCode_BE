@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         addProduct();
     });
+    document.getElementById('cartForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        addToCart();
+    });
 });
 
 function openModal() {
@@ -14,6 +18,14 @@ function openModal() {
 
 function closeModal() {
     document.getElementById('modalOverlay').style.display = 'none';
+}
+
+function openCartModal() {
+    document.getElementById('cartModalOverlay').style.display = 'flex';
+}
+
+function closeCartModal() {
+    document.getElementById('cartModalOverlay').style.display = 'none';
 }
 
 let totalPrice = 0;
@@ -29,7 +41,7 @@ function fetchProducts() {
                     <tr>
                         <td>${product.id}</td>
                         <td>${product.name}</td>
-                        <td>${product.description}</td>
+                        <td>${product.type}</td>
                         <td>${product.price}</td>
                         <td>
                             <button onclick="deleteProduct(${product.id})">Delete</button>
@@ -46,12 +58,12 @@ function fetchProducts() {
 
 function addProduct() {
     const name = document.getElementById('name').value;
-    const description = document.getElementById('description').value;
+    const type = document.getElementById('type').value;
     const price = document.getElementById('price').value;
 
     const product = {
         name: name,
-        description: description,
+        type: type,
         price: parseFloat(price)
     };
 
@@ -65,9 +77,9 @@ function addProduct() {
         .then(response => {
             if (response.ok) {
                 alert('Product added successfully!');
-                closeModal(); // Tutup pop-up setelah menambahkan data
-                fetchProducts(); // Refresh daftar produk setelah menambahkan data
-                document.getElementById('productForm').reset(); // Reset form setelah pengiriman
+                closeModal();
+                fetchProducts();
+                document.getElementById('productForm').reset();
                 totalPrice += price;
                 updateTotalPrice();
             } else {
@@ -81,11 +93,37 @@ function deleteProduct(productId) {
     fetch(`/api/products/${productId}`, {
         method: 'DELETE'
     })
-        .then(() => {
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
             alert(`Product with ID ${productId} has been successfully deleted.`);
-            fetchProducts(); // Refresh daftar produk setelah menghapus data
+            fetchProducts(); // Pastikan fetchProducts didefinisikan di tempat lain
         })
         .catch(error => console.error('Error deleting product:', error));
+}
+
+function addToCart() {
+    const productId = document.getElementById('productId').value;
+    const quantity = document.getElementById('quantity').value;
+
+    fetch(`/api/cart/add?productId=${productId}&quantity=${quantity}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                alert('Product added to cart successfully!');
+                document.getElementById('cartForm').reset();
+                closeCartModal(); // Tutup pop-up setelah menambahkan produk ke keranjang
+                fetchCart(); // Refresh data keranjang
+            } else {
+                alert('Failed to add product to cart');
+            }
+        })
+        .catch(error => console.error('Error adding to cart:', error));
 }
 function updateTotalPrice() {
     document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
