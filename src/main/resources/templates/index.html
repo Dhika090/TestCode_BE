@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Product Management</h1>
+    <button class="open-modal-button" onclick="openModal()">Add New Product</button>
+
+    <!-- Overlay dan Pop-up Form -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-button" onclick="closeModal()">X</button>
+            <h2>Add Product</h2>
+            <form id="productForm">
+                <label for="name">Product Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="description">Description:</label>
+                <input type="text" id="description" name="description" required>
+
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" required>
+
+                <button type="submit">Add Product</button>
+            </form>
+        </div>
+    </div>
+
+    <h2>Product List</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="productTableBody">
+        <!-- Produk akan dimasukkan di sini -->
+        </tbody>
+    </table>
+    <h3>Total Price: <span id="totalPrice"></span></h3>
+</div>
+
+<!-- Pastikan file JavaScript di-link di sini -->
+</body>
+<script src="/script.js"></script>
+
+</html>
