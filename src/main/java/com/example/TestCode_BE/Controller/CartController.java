@@ -15,24 +15,36 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
+
     @PostMapping("/add")
-    public ResponseEntity<Cart> addProductToChar(@RequestParam Long productId, @RequestParam int quantity){
+    public ResponseEntity<Cart> addProductToCart(@RequestParam Long productId, @RequestParam int quantity) {
         System.out.println("Received productId: " + productId + ", quantity: " + quantity);
-        Cart cart = cartService.addProductToChart(productId,quantity);
-        return new ResponseEntity<>(cart, HttpStatus.OK);
+        try {
+            Cart cart = cartService.addProductToCart(productId, quantity);
+            return new ResponseEntity<>(cart, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping
-    public ResponseEntity<Cart> getCart(){
-        Cart cart = cartService.getCart();
-        return new ResponseEntity<>(cart, HttpStatus.OK);
+    public ResponseEntity<Cart> getCart() {
+        try {
+            Cart cart = cartService.getCart();
+            return new ResponseEntity<>(cart, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<Cart>checkout(){
-        Cart cart = cartService.cartCheckout();
-        return new ResponseEntity<>(cart,HttpStatus.OK);
+    public ResponseEntity<Cart> checkout() {
+        try {
+            Cart cart = cartService.checkout();
+            return new ResponseEntity<>(cart, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-
 
 }

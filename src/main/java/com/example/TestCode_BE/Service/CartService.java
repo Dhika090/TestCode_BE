@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 public class CartService {
@@ -24,11 +23,16 @@ public class CartService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-    public Cart addProductToChart(Long productId, int quantity){
+    public Cart addProductToCart(Long productId, int quantity) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than zero");
         }
-        Cart cart = cartRepository.findById(1L).orElse(new Cart());
+
+        Cart cart = cartRepository.findById(1L).orElseGet(() -> {
+            Cart newCart = new Cart();
+            return cartRepository.save(newCart);
+        });
+
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product with ID " + productId + " not found"));
 
@@ -36,20 +40,19 @@ public class CartService {
         orderItem.setProduct(product);
         orderItem.setCart(cart);
         orderItem.setQuantity(quantity);
+        orderItemRepository.save(orderItem);
 
-        if (cart.getItems() == null) {
-            cart.setItems(new ArrayList<>());
-        }
         cart.getItems().add(orderItem);
-        cartRepository.save(cart);
-        return cart;
-    }
-    public Cart getCart(){
-        return cartRepository.findById(1L).orElse(new Cart());
+
+        return cartRepository.save(cart);
     }
 
-    public Cart cartCheckout(){
-        Cart cart = cartRepository.findById(1L).orElseThrow(()-> new RuntimeException("Cart Not Found"));
+    public Cart getCart() {
+        return cartRepository.findById(1L).orElseThrow(() -> new RuntimeException("Cart Not Found"));
+    }
+
+    public Cart checkout() {
+        Cart cart = cartRepository.findById(1L).orElseThrow(() -> new RuntimeException("Cart Not Found"));
         cart.setCheckedOut(true);
         return cartRepository.save(cart);
     }
