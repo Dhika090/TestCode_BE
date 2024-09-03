@@ -124,8 +124,8 @@ function addToCart() {
             if (response.ok) {
                 alert('Product added to cart successfully!');
                 document.getElementById('cartForm').reset();
-                closeCartModal(); // Tutup pop-up setelah menambahkan produk ke keranjang
-                fetchCart(); // Refresh data keranjang
+                closeCartModal();
+                fetchCart();
             } else {
                 alert('Failed to add product to cart');
             }
@@ -174,6 +174,44 @@ function fetchCart() {
         })
         .catch(error => console.error('Error fetching cart items:', error));
 }
+
+function Checkout() {
+    fetch('/api/cart/checkout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    console.error('Error during checkout:', errorData);
+                    throw new Error('Checkout failed: ' + (errorData.message || 'Unknown error'));
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Checkout successful!');
+
+            const cartTableBody = document.getElementById('cartTableBody');
+            cartTableBody.innerHTML = '';
+
+            const cartContainer = document.getElementById('cartContainer');
+            cartContainer.style.display = 'none';
+
+            const totalCartElement = document.getElementById('totalCart');
+            totalCartElement.style.display = 'none';
+
+            const emptyCartMessage = document.getElementById('emptyCartMessage');
+            emptyCartMessage.style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error during checkout:', error);
+            alert('Checkout failed. Please try again.');
+        });
+}
+
 
 function updateTotalPrice() {
     document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
